@@ -21,6 +21,7 @@
 **Note**
 | Field | Type | Required | Notes |
 |---|---|---|---|
+| id | text (unique) | auto | generated when the note is created; never changes |
 | title | text | yes | |
 | topic | reference to a Topic | yes | each note has exactly one |
 | date | date | no | defaults to today |
