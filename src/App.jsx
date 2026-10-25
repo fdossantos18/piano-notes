@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createNote } from './notes.js'
+import { loadNotes, saveNotes } from './storage.js'
 
 function App() {
-  const [notes, setNotes] = useState([])
+  const [notes, setNotes] = useState(() => loadNotes())
+
+  useEffect(() => {
+    saveNotes(notes)
+  }, [notes])
+  
   const [title, setTitle] = useState('')
   const [topic, setTopic] = useState('')
   const [error, setError] = useState('')
