@@ -3,10 +3,21 @@ import { createNote } from './notes.js'
 
 function App() {
   const [notes, setNotes] = useState([])
+  const [title, setTitle] = useState('')
+  const [topic, setTopic] = useState('')
+  const [error, setError] = useState('')
 
-  function handleAddSample() {
-    const note = createNote({ title: 'Voicing basics', topic: 'Voicing' })
-    setNotes([...notes, note])
+  function handleSubmit(event) {
+    event.preventDefault()
+    try {
+      const note = createNote({ title, topic })
+      setNotes([...notes, note])
+      setTitle('')
+      setTopic('')
+      setError('')
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   function handleDelete(id) {
@@ -16,7 +27,20 @@ function App() {
   return (
     <div>
       <h1>Piano Notes</h1>
-      <button onClick={handleAddSample}>Add sample note</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <input
+          placeholder="Topic"
+          value={topic}
+          onChange={(event) => setTopic(event.target.value)}
+        />
+        <button type="submit">Add note</button>
+        {error && <p>{error}</p>}
+      </form>
       <ul>
         {notes.map((note) => (
           <li key={note.id}>
@@ -29,6 +53,5 @@ function App() {
   )
 }
 
-  
 export default App
 
