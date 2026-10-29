@@ -41,8 +41,8 @@ function App() {
     setNotes(notes.filter((note) => note.id !== id))
     if (id === selectedId) {
       setSelectedId(null)
+    }
   }
-}
 
   return (
     <div>
