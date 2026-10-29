@@ -16,3 +16,15 @@ export function createNote({ title, topic, date, content = '', homework = '', fo
         focus,
     }
 }
+
+export function updateNote(note, changes) {
+    const updated = { ...note, ...changes }
+    if (!updated.title || !updated.title.trim()) {
+        throw new Error('Title is required')
+    }
+    if (!updated.topic || !updated.topic.trim()) {
+        throw new Error('Topic is required')
+    }
+    return { ...updated, title: updated.title.trim(), topic: updated.topic.trim() }
+}
+
