@@ -16,6 +16,8 @@ function App() {
   const [content, setContent] = useState('')
   const [homework, setHomework] = useState('')
   const [focus, setFocus] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
+  const selectedNote = notes.find((note) => note.id === selectedId)
   
 
   function handleSubmit(event) {
@@ -28,6 +30,7 @@ function App() {
       setHomework('')
       setFocus('')
       setTopic('')
+      setDate('')
       setError('')
     } catch (err) {
       setError(err.message)
@@ -36,7 +39,10 @@ function App() {
 
   function handleDelete(id) {
     setNotes(notes.filter((note) => note.id !== id))
+    if (id === selectedId) {
+      setSelectedId(null)
   }
+}
 
   return (
     <div>
@@ -78,14 +84,23 @@ function App() {
       <ul>
         {notes.map((note) => (
           <li key={note.id}>
-            {note.title} ({note.topic}, {note.date})
-            <p>Learned: {note.content}</p>
-            <p>Homework: {note.homework}</p>
-            <p>Focus: {note.focus}</p>
+            <button onClick={() => setSelectedId(note.id)}>
+              {note.title} ({note.topic}, {note.date})
+            </button>
             <button onClick={() => handleDelete(note.id)}>Delete</button>
           </li>
         ))}
       </ul>
+      {selectedNote && (
+        <section>
+          <h2>{selectedNote.title}</h2>
+          <p>Topic: {selectedNote.topic}</p>
+          <p>Date: {selectedNote.date}</p>
+          <p>Content: {selectedNote.content}</p>
+          <p>Homework: {selectedNote.homework}</p>
+          <p>Focus: {selectedNote.focus}</p>
+        </section>
+      )}
     </div>
   )
 }
