@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createNote } from './notes.js'
+import { createNote, updateNote } from './notes.js'
 import { loadNotes, saveNotes } from './storage.js'
 
 function App() {
@@ -17,21 +17,43 @@ function App() {
   const [homework, setHomework] = useState('')
   const [focus, setFocus] = useState('')
   const [selectedId, setSelectedId] = useState(null)
+  const [editingId, setEditingId] = useState(null)
   const selectedNote = notes.find((note) => note.id === selectedId)
+
+
+  function resetForm() {
+    setTitle('')
+    setTopic('')
+    setDate('')
+    setContent('')
+    setHomework('')
+    setFocus('')
+    setError('')
+    setEditingId(null)
+  }
+
+  function handleEdit(note) {
+    setEditingId(note.id)
+    setTitle(note.title)
+    setTopic(note.topic)
+    setDate(note.date)
+    setContent(note.content)
+    setHomework(note.homework)
+    setFocus(note.focus)
+    setError('')
+  }
   
 
   function handleSubmit(event) {
     event.preventDefault()
+    const fields = { title, topic, date, content, homework, focus }
     try {
-      const note = createNote({ title, topic, date, content, homework, focus })
-      setNotes([...notes, note])
-      setTitle('')
-      setContent('')
-      setHomework('')
-      setFocus('')
-      setTopic('')
-      setDate('')
-      setError('')
+      if (editingId) {
+        setNotes(notes.map((note) => (note.id === editingId ? updateNote(note, fields) : note)))
+      } else {
+        setNotes([...notes, createNote(fields)])
+      }
+      resetForm()
     } catch (err) {
       setError(err.message)
     }
@@ -41,6 +63,9 @@ function App() {
     setNotes(notes.filter((note) => note.id !== id))
     if (id === selectedId) {
       setSelectedId(null)
+    }
+    if (id === editingId) {
+      resetForm()
     }
   }
 
@@ -78,7 +103,10 @@ function App() {
           value={focus}
           onChange={(event) => setFocus(event.target.value)}
         />
-        <button type="submit">Add note</button>
+        <button type="submit">{editingId ? 'Save changes' : 'Add note'}</button>
+        {editingId && (
+          <button type="button" onClick={resetForm}>Cancel</button>
+        )}
         {error && <p>{error}</p>}
       </form>
       <ul>
@@ -99,6 +127,7 @@ function App() {
           <p>Content: {selectedNote.content}</p>
           <p>Homework: {selectedNote.homework}</p>
           <p>Focus: {selectedNote.focus}</p>
+          <button onClick={() => handleEdit(selectedNote)}>Edit</button>
         </section>
       )}
     </div>
