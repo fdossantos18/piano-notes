@@ -31,4 +31,9 @@ describe('updateNote', () => {
         const note = createNote({ title: 'Old title', topic: 'Voicing' })
         expect(() => updateNote(note, { title: '' })).toThrow('Title is required')
     })
+    it('does not save an empty date', () => {
+        const note = createNote({ title: 'Old title', topic: 'Voicing', date: '2026-01-15' })
+        const updated = updateNote(note, { date: '' })
+        expect(updated.date).toBeTruthy()
+    })
 })
