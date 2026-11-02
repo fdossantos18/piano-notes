@@ -26,6 +26,11 @@ export function updateNote(note, changes) {
     
     validateNote(updated)
     
-    return { ...updated, title: updated.title.trim(), topic: updated.topic.trim() }
+    return { 
+        ...updated, 
+        title: updated.title.trim(),
+        topic: updated.topic.trim(),
+        date: updated.date || new Date().toLocaleDateString('en-CA'), 
+    }
 }
 
