@@ -19,6 +19,8 @@ function App() {
   const [selectedId, setSelectedId] = useState(null)
   const [editingId, setEditingId] = useState(null)
   const selectedNote = notes.find((note) => note.id === selectedId)
+  const topics = [...new Set(notes.map((note) => note.topic))]
+  
 
 
   function resetForm() {
@@ -80,9 +82,15 @@ function App() {
         />
         <input
           placeholder="Topic"
+          list="topic-options"
           value={topic}
           onChange={(event) => setTopic(event.target.value)}
         />
+        <datalist id="topic-options">
+          {topics.map((t) => (
+            <option key={t} value={t} />
+          ))}
+        </datalist>
         <input
           type="date"
           value={date}
